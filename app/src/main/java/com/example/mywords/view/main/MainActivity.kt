@@ -52,6 +52,7 @@ class MainActivity : BaseActivity<AppState>() {
         }
     }
 
+
     override fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
