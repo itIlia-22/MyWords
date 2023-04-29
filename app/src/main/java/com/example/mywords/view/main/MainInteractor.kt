@@ -3,7 +3,7 @@ package com.example.mywords.view.main
 import com.example.mywords.model.repository.Repository
 import com.example.mywords.model.data.AppState
 import com.example.mywords.model.data.DataModel
-import com.example.mywords.presenter.Interactor
+import com.example.mywords.viewmodel.Interactor
 import io.reactivex.Observable
 
 class MainInteractor(

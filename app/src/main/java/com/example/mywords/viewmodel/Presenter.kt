@@ -1,4 +1,4 @@
-package com.example.mywords.presenter
+package com.example.mywords.viewmodel
 
 import com.example.mywords.model.data.AppState
 import com.example.mywords.view.base.View
