@@ -15,13 +15,15 @@ import com.example.mywords.viewmodel.Presenter
 import com.example.mywords.view.base.BaseActivity
 import com.example.mywords.view.base.View
 import com.example.mywords.viewmodel.BaseViewModel
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<AppState>() {
 
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val model by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }
+    override lateinit var model: MainViewModel
     private val observer = Observer<AppState> { renderData(it) }
 
     private lateinit var binding: ActivityMainBinding
@@ -40,9 +42,13 @@ class MainActivity : BaseActivity<AppState>() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        model = viewModelFactory.create(MainViewModel::class.java)
+        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
         binding.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object :
