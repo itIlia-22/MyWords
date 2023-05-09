@@ -4,16 +4,16 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mywords.R
 import com.example.mywords.model.data.DataModel
+import com.example.mywords.utils.convertMeaningsToString
+import kotlinx.android.synthetic.main.activity_main_recycler_view.view.*
 
 class MainAdapter(
-    private var onItemClickListener: OnItemClickListener,
-    private var data: List<DataModel>
+    private var onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<MainAdapter.RecyclerViewItemViewHolder>() {
-
+    private var data: List<DataModel> = arrayListOf()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: List<DataModel>) {
@@ -34,23 +34,25 @@ class MainAdapter(
         holder.bind(data[position])
     }
 
-    inner class RecyclerViewItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class RecyclerViewItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
-                itemView.findViewById<TextView>(R.id.header_textview_recycler_item).text = data.text
-                itemView.findViewById<TextView>(R.id.description_textview_recycler_item).text =
-                    data.meanings?.get(0)?.translation?.translation
-                itemView.setOnClickListener {
-                    onItemClickListener.getData(data)
-                }
+                itemView.header_textview_recycler_item.text = data.text
+                itemView.description_textview_recycler_item.text =
+                    convertMeaningsToString(data.meanings!!)
+                itemView.setOnClickListener { openInNewWindow(data) }
             }
         }
     }
 
-    interface OnItemClickListener {
-        fun getData(data: DataModel)
+    private fun openInNewWindow(listItemData: DataModel) {
+        onItemClickListener.onItemClick(listItemData)
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(data: DataModel)
+    }
 }
 
 

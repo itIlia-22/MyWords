@@ -1,24 +1,16 @@
 package com.example.mywords.app
 
 import android.app.Application
-import com.example.mywords.id.AppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import javax.inject.Inject
+import com.example.mywords.application
+import com.example.mywords.mainScreen
+import org.koin.core.context.startKoin
 
-class WordsApp  : Application(), HasAndroidInjector {
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-    override fun androidInjector(): AndroidInjector<Any> {
-        return dispatchingAndroidInjector
-    }
+class WordsApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
-        AppComponent.Builder()
-            .application(this)
-            .build()
-            .inject(this)
+        startKoin {
+            modules(listOf(application, mainScreen))
+        }
     }
 }
