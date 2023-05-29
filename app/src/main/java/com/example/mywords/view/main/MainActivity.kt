@@ -11,15 +11,16 @@ import com.example.mywords.R
 import com.example.mywords.databinding.ActivityMainBinding
 import com.example.mywords.model.data.AppState
 import com.example.mywords.model.data.DataModel
+import com.example.mywords.utils.convertMeaningsToString
 import com.example.mywords.utils.network.isOnline
 import com.example.mywords.view.base.BaseActivity
+import com.example.mywords.view.description.DescriptionActivity
 import dagger.android.AndroidInjection
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
 
-    private val observer = Observer<AppState> { renderData(it) }
     private lateinit var binding: ActivityMainBinding
     override lateinit var model: MainViewModel
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
@@ -32,7 +33,15 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnItemClickListener =
         object : MainAdapter.OnItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        context = this@MainActivity,
+                        word = data.text!!,
+                        description = convertMeaningsToString(data.meanings!!),
+                        url = data.meanings[0].imageUrl
+
+                    )
+                )
             }
         }
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
