@@ -1,26 +1,35 @@
-package com.example.mywords
+package com.example.mywords.id
 
-import com.example.mywords.id.NAME_LOCAL
-import com.example.mywords.id.NAME_REMOTE
+import androidx.room.Room
 import com.example.mywords.model.data.DataModel
 import com.example.mywords.model.datasource.RetrofitImplementation
 import com.example.mywords.model.datasource.RoomDataBaseImplementation
 import com.example.mywords.model.repository.Repository
-import com.example.mywords.model.repository.RepositoryImpl
+import com.example.mywords.model.repository.RepositoryImplementation
+import com.example.mywords.model.repository.RepositoryImplementationLocal
+import com.example.mywords.model.repository.RepositoryLocal
+import com.example.mywords.room.HistoryDataBase
+import com.example.mywords.view.history.HistoryInteractor
+import com.example.mywords.view.history.HistoryViewModel
 import com.example.mywords.view.main.MainInteractor
 import com.example.mywords.view.main.MainViewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val application = module {
-    single<Repository<List<DataModel>>>(named(NAME_REMOTE)) {
-        RepositoryImpl(RetrofitImplementation())
-    }
-    single<Repository<List<DataModel>>>(named(NAME_LOCAL)) {
-        RepositoryImpl(RoomDataBaseImplementation())
+    single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
+    single { get<HistoryDataBase>().historyDao() }
+    single<Repository<List<DataModel>>> { RepositoryImplementation(RetrofitImplementation()) }
+    single<RepositoryLocal<List<DataModel>>> { RepositoryImplementationLocal(RoomDataBaseImplementation(get()))
     }
 }
-    val mainScreen = module {
-        factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
-        factory { MainViewModel(get()) }
-    }
+
+val mainScreen = module {
+    factory { MainViewModel(get()) }
+    factory { MainInteractor(get(), get()) }
+}
+
+val historyScreen = module {
+    factory { HistoryViewModel(get()) }
+    factory { HistoryInteractor(get(), get()) }
+}

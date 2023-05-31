@@ -1,4 +1,4 @@
-package com.example.mywords.utils
+package com.example.mywords.utils.ui
 
 import android.content.Context
 import android.util.AttributeSet

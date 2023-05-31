@@ -1,11 +1,8 @@
 package com.example.mywords.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mywords.model.data.AppState
-import com.example.mywords.rx.SchedulerProvider
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : AppState>(
