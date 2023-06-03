@@ -15,6 +15,7 @@ import com.example.mywords.utils.network.isOnline
 import com.example.mywords.view.base.BaseActivity
 import com.example.mywords.view.description.DescriptionActivity
 import com.example.mywords.view.history.HistoryActivity
+import com.example.mywords.view.main.adapter.MainAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG = "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
@@ -30,8 +31,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
-    private val onListItemClickListener: MainAdapter.OnItemClickListener =
-        object : MainAdapter.OnItemClickListener {
+    private val onListItemClickListener: MainAdapter.OnListItemClickListener =
+        object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
                 startActivity(
                     DescriptionActivity.getIntent(
@@ -97,3 +98,4 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         binding.mainActivityRecyclerview.adapter = adapter
     }
 }
+
